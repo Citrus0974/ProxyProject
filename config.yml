@@ -1,0 +1,7 @@
+app:
+  name: "ProxyProject"
+  version:  "0.1"
+log:
+  level: "DEBUG"
+server:
+  port: 8084  
