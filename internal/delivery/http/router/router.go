@@ -1,0 +1,23 @@
+package router
+
+import (
+	"github.com/Citrus0974/ProxyProject/internal/delivery/http/handler"
+	"github.com/gin-gonic/gin"
+)
+
+type Handlers struct {
+	ProxyHandler  *handler.ProxyHandler
+	HealthHandler *handler.HealthHandler
+}
+
+func RouterSetup(engine *gin.Engine, h Handlers) {
+	healthApi := engine.Group("/proxy")
+	{
+		healthApi.GET("/health", h.HealthHandler.Handle)
+	}
+	healthApi.Use(gin.Recovery())
+	healthApi.Use(gin.Logger())
+
+	//proxy
+	engine.NoRoute(gin.Logger(), gin.Recovery(), h.ProxyHandler.Handle)
+}
