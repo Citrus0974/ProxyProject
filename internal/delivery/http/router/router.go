@@ -11,6 +11,7 @@ type Handlers struct {
 }
 
 func RouterSetup(engine *gin.Engine, h Handlers) {
+	//proxy managing api
 	healthApi := engine.Group("/proxy")
 	{
 		healthApi.GET("/health", h.HealthHandler.Handle)

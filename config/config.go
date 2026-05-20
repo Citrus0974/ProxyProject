@@ -1,6 +1,8 @@
 package config
 
 import (
+	"sync"
+
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
@@ -10,11 +12,13 @@ type (
 		Log    logConfig        `yaml:"log"`
 		Server httpServerConfig `yaml:"server"`
 		Proxy  proxyConfig      `yaml:"proxy"`
+		mutex  sync.Mutex
 	}
 
 	appConfig struct {
-		Name    string `yaml:"name" env:"APP_NAME" env-default:"ProxyApp"`
-		Version string `yaml:"version" env:"APP_VERSION" env-default:"0.1"`
+		Name               string `yaml:"name" env:"APP_NAME" env-default:"ProxyApp"`
+		Version            string `yaml:"version" env:"APP_VERSION" env-default:"0.1"`
+		ReloadTimerSeconds int    `yaml:"reload-timer" env:"RELOAD_TIMER"`
 	}
 	logConfig struct {
 		Level string `yaml:"level" env:"LOG_LEVEL" env-default:"INFO" env-upd:"true"`
@@ -35,4 +39,15 @@ func NewConfig(path string) (*Config, error) {
 	}
 
 	return cfg, nil
+}
+
+func UpdateConfig(cfg *Config) error {
+	cfg.mutex.Lock()
+	defer cfg.mutex.Unlock()
+
+	err := cleanenv.UpdateEnv(cfg)
+	if err != nil {
+		return err
+	}
+	return nil
 }
