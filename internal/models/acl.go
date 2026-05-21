@@ -1,6 +1,10 @@
 package models
 
-import "net/netip"
+import (
+	"net/netip"
+
+	"github.com/zmap/go-iptree/iptree"
+)
 
 type Decision int
 
@@ -13,9 +17,8 @@ type Rules struct {
 	AllowIPs map[netip.Addr]struct{}
 	DenyIPs  map[netip.Addr]struct{}
 
-	AllowCIDRs []netip.Prefix
-	DenyCIDRs  []netip.Prefix
+	AllowTree *iptree.IPTree
+	DenyTree  *iptree.IPTree
 
 	DefaultAllow bool
 }
-
