@@ -26,8 +26,7 @@ func main() {
 	fmt.Printf("Starting %s version %s\n", app.Name, app.Version)
 
 	logger := logger.NewZerologLogger()
-	logger.Debugf("test message", 123, "ip")
-	
+	logger.Debugf("test message %d %s", 123, "ip")
 
 	reverseProxy, err := proxyInfrastructure.NewReverseProxy(proxy.BaseURL)
 	if err != nil {
@@ -48,8 +47,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Server error: %s", err)
 	}
-	
-	go func(){
+
+	go func() {
 		config.UpdateConfig(cfg)
 		time.Sleep(time.Duration(app.ReloadTimerSeconds) * time.Second)
 	}()

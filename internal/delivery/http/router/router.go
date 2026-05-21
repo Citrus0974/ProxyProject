@@ -2,12 +2,17 @@ package router
 
 import (
 	"github.com/Citrus0974/ProxyProject/internal/delivery/http/handler"
+	"github.com/Citrus0974/ProxyProject/internal/delivery/http/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 type Handlers struct {
 	ProxyHandler  *handler.ProxyHandler
 	HealthHandler *handler.HealthHandler
+}
+
+type Middlewares struct {
+	ACL middleware.ACLMiddleware
 }
 
 func RouterSetup(engine *gin.Engine, h Handlers) {
