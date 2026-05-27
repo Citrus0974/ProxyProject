@@ -28,6 +28,9 @@ type (
 	}
 	proxyConfig struct {
 		BaseURL string `yaml:"base-url" env:"PROXY_URL" env-default:"http://127.0.0.1:8081"`
+		DefaultAllow bool `yaml:"default-allow" env:"DEFAULT_ALLOW" env-default:"false"`
+		AllowFile string `yaml:"allow-file" env:"ALLOW_FILE" env-default:"configs/allow.json"`
+		DenyFile string `yaml:"deny-file" env:"DENY_FILE" env-default:"configs/deny.json"`
 	}
 )
 

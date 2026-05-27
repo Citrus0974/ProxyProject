@@ -2,11 +2,12 @@ package acl
 
 import (
 	"encoding/json"
-	"net/netip"
 	"os"
 
+	"github.com/Citrus0974/ProxyProject/internal/infrastructure/iptree"
 	"github.com/Citrus0974/ProxyProject/internal/models"
-	"github.com/zmap/go-iptree/iptree"
+
+	"net/netip"
 )
 
 type ACLFile struct {
@@ -19,14 +20,21 @@ type Loader struct {
 	denyPath  string
 }
 
-func NewLoader(allowPath string, denyPath string) *Loader {
+func NewLoader(
+	allowPath string,
+	denyPath string,
+) *Loader {
+
 	return &Loader{
 		allowPath: allowPath,
 		denyPath:  denyPath,
 	}
 }
 
-func (l *Loader) Load(defaultAllow bool) (*models.Rules, error) {
+func (l *Loader) Load(
+	defaultAllow bool,
+) (*models.Rules, error) {
+
 	allowData, err := loadFile(l.allowPath)
 	if err != nil {
 		return nil, err
@@ -68,17 +76,11 @@ func (l *Loader) Load(defaultAllow bool) (*models.Rules, error) {
 	}
 
 	for _, cidr := range allowData.CIDRs {
-		err := rules.AllowTree.AddByString(cidr, true)
-		if err != nil {
-			return nil, err
-		}
+		_ = rules.AllowTree.Add(cidr)
 	}
 
 	for _, cidr := range denyData.CIDRs {
-		err := rules.DenyTree.AddByString(cidr, true)
-		if err != nil {
-			return nil, err
-		}
+		_ = rules.DenyTree.Add(cidr)
 	}
 
 	return rules, nil

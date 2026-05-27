@@ -3,7 +3,7 @@ package models
 import (
 	"net/netip"
 
-	"github.com/zmap/go-iptree/iptree"
+	"github.com/Citrus0974/ProxyProject/internal/infrastructure/iptree"
 )
 
 type Decision int
@@ -17,8 +17,8 @@ type Rules struct {
 	AllowIPs map[netip.Addr]struct{}
 	DenyIPs  map[netip.Addr]struct{}
 
-	AllowTree *iptree.IPTree
-	DenyTree  *iptree.IPTree
+	AllowTree iptree.Tree
+	DenyTree  iptree.Tree
 
 	DefaultAllow bool
 }
